@@ -3,7 +3,6 @@
 ### Student Information
 - Name: Lomboy, Jorena C.
 - Section: BSIT-WMT 2-2
-- Date: October 25, 2026
 
 ---
 
