@@ -1,81 +1,63 @@
 class Stack {
     constructor() {
         this.items = [];
-        this.count = 0;
     }
 
-    // Add element to top of stack
     push(element) {
         this.items.push(element);
-        this.count++;
-        return element;
     }
 
-    // Remove top element
     pop() {
-        if (this.count === 0) {
-            return undefined;
-        }
-
-        const deletedItem = this.items.pop();
-        this.count--;
-
-        return deletedItem;
+        if (this.isEmpty()) return undefined;
+        return this.items.pop();
     }
 
-    // Check top element without removing
     peek() {
-        if (this.count === 0) {
-            return undefined;
-        }
-
-        return this.items[this.count - 1];
+        if (this.isEmpty()) return undefined;
+        return this.items[this.items.length - 1];
     }
 
-    // Check if stack is empty
     isEmpty() {
-        return this.count === 0;
+        return this.items.length === 0;
     }
 
-    // Get stack size
     size() {
-        return this.count;
+        return this.items.length;
     }
 
-    // Clear stack
     clear() {
         this.items = [];
-        this.count = 0;
     }
 }
 
 const stack = new Stack();
 
-// Display stack blocks
 function displayStack(highlightTop = false) {
-    $("#stack").empty();
+    const stackDisplay = document.getElementById("stack");
+    stackDisplay.innerHTML = "";
 
     const values = stack.items.slice().reverse();
 
     values.forEach((value, index) => {
-        const block = $("<div>")
-            .addClass("row bg-primary push text-white border border-light")
-            .text(value);
+        const block = document.createElement("div");
+
+        block.className = "row bg-primary push text-white border border-light";
+        block.textContent = value;
 
         if (highlightTop && index === 0) {
-            block.addClass("border-warning border-3");
+            block.classList.add("border-warning", "border-3");
         }
 
-        $("#stack").append(block);
+        stackDisplay.appendChild(block);
     });
 }
 
-// Wait for page to load
-$(document).ready(function() {
+document.addEventListener("DOMContentLoaded", function () {
+    const input = document.getElementById("stackInput");
+    const deleted = document.getElementById("deleted");
 
-    // PUSH
-    $("#pushBtn").click(function() {
-        const value = $("#stackInput").val().trim();
+    document.getElementById("pushBtn").addEventListener("click", function () {
+        const value = input.value.trim();
 
         if (value === "") {
             alert("Please enter a value!");
@@ -83,47 +65,34 @@ $(document).ready(function() {
         }
 
         stack.push(value);
-        $("#stackInput").val("");
-
-        $("#deleted").empty();
+        input.value = "";
+        deleted.textContent = "";
         displayStack();
     });
 
-    // POP
-    $("#popBtn").click(function() {
+    document.getElementById("popBtn").addEventListener("click", function () {
         if (stack.isEmpty()) {
             alert("Stack is empty!");
             return;
         }
 
-        const deletedItem = stack.pop();
-
-        $("#deleted")
-            .empty()
-            .text(deletedItem);
-
+        deleted.textContent = stack.pop();
         displayStack();
     });
 
-    // PEEK
-    $("#peekBtn").click(function() {
+    document.getElementById("peekBtn").addEventListener("click", function () {
         if (stack.isEmpty()) {
             alert("Stack is empty!");
             return;
         }
-
-        alert("Top element: " + stack.peek());
 
         displayStack(true);
+        alert("Top element: " + stack.peek());
     });
 
-    // CLEAR
-    $("#clearBtn").click(function() {
+    document.getElementById("clearBtn").addEventListener("click", function () {
         stack.clear();
-
-        $("#deleted").empty();
-
+        deleted.textContent = "";
         displayStack();
     });
-
 });
